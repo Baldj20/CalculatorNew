@@ -44,10 +44,10 @@ namespace CalculatorNew
         }
 
 
-        static bool isFunctionCreating(string exeption)
+        public static bool isFunctionCreating(string exeption)
         {
             if (exeption.Contains("="))
-            {
+            { 
                 var parts = exeption.Split('=');
                 if (parts.Length != 2)
                     return false;
@@ -143,7 +143,7 @@ namespace CalculatorNew
 
 
 
-        public bool isFunctionContains(string expression, List<UserFunction> usersFunctions)
+        public static bool isFunctionContains(string expression, List<UserFunction> usersFunctions)
         {
             bool isFunctionUsed = false;
             foreach (var userFunction in usersFunctions)
@@ -157,7 +157,7 @@ namespace CalculatorNew
 
         }
 
-        public string ConvertFunctionsToExpression(string expression, List<UserFunction> usersFunctions)
+        public static string ConvertFunctionsToExpression(string expression, List<UserFunction> usersFunctions)
         {
             while (isFunctionContains(expression, usersFunctions))
             {

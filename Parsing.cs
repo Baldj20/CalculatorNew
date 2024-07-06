@@ -15,8 +15,8 @@ namespace CalculatorNew
             {
                 return output;
             }
-            output = ConvertFunctionsToExpression(output, UserFunction.functions);
-            output = ParseInput(output);
+            output = UserFunction.ConvertFunctionsToExpression(output, new List<UserFunction>());
+            output = Variable.ParseInput(output);
             switch (output)
             {
                 case "Incorrect input":
