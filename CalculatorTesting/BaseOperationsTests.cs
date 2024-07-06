@@ -203,5 +203,45 @@ namespace CalculatorNew.Tests
 
             Assert.AreEqual(expected, answer);
         }
+
+        // Тестирование приоритета операций
+        [Test]
+        public void PriorityOperations()
+        {
+            string expression = "2 + 2 * 2 + 10 / 2";
+            double expected = 11;
+
+            string parsedStr = Parsing.Parse(expression);
+            double answer = CalcResult.Evaluate(parsedStr);
+
+            Assert.AreEqual(expected, answer);
+        }
+
+        // Тестирование дробных чисел
+        [Test]
+        public void FractNums()
+        {
+            string expression = "2.75 / 1.1";
+            double expected = 2.5;
+
+            string parsedStr = Parsing.Parse(expression);
+            double answer = CalcResult.Evaluate(parsedStr);
+
+            Assert.AreEqual(expected, answer);
+        }
+
+        // Тестирование скобок
+        [Test]
+        public void Parentheses()
+        {
+            string expression = "2 * (5 + 10)";
+            double expected = 30;
+
+            string parsedStr = Parsing.Parse(expression);
+            double answer = CalcResult.Evaluate(parsedStr);
+
+            Assert.AreEqual(expected, answer);
+        }
+
     }
 }
