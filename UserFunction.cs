@@ -16,6 +16,7 @@ namespace CalculatorNew
         private string _name;
         private string[] _functionArgs;
         private string _body;
+        public static List<UserFunction> functions = new List<UserFunction>();
         public UserFunction(string name, string[] functionArgs, string body)
         {
             Name = name;
@@ -56,7 +57,7 @@ namespace CalculatorNew
 
 
                 if (left.Contains("(") && left.Contains(")"))
-                {
+                {                    
                     return true;
                 }
                 else
@@ -71,7 +72,7 @@ namespace CalculatorNew
 
         }
 
-        private void isValidArgument(string argument)
+        private static void isValidArgument(string argument)
         {
             foreach (char character in invalidCharacters)
             {
@@ -83,7 +84,7 @@ namespace CalculatorNew
 
         }
 
-        private void doesBodyContainsArgument(string body, string[] argumnets)
+        private static void doesBodyContainsArgument(string body, string[] argumnets)
         {
             // Счётчик аргуметов в теле функции
             int counter = 0;
@@ -110,7 +111,7 @@ namespace CalculatorNew
             return Regex.Replace(expression, pattern, replacement);
         }
 
-        public UserFunction CreateUserFunction(string expression)
+        public static UserFunction CreateUserFunction(string expression)
         {
             UserFunction userFunction = new UserFunction(null, null, null);
 
@@ -143,10 +144,10 @@ namespace CalculatorNew
 
 
 
-        public static bool isFunctionContains(string expression, List<UserFunction> usersFunctions)
+        public static bool isFunctionContains(string expression)
         {
             bool isFunctionUsed = false;
-            foreach (var userFunction in usersFunctions)
+            foreach (var userFunction in functions)
             {
                 if (expression.Contains(userFunction.Name + "("))
                 {
@@ -157,11 +158,11 @@ namespace CalculatorNew
 
         }
 
-        public static string ConvertFunctionsToExpression(string expression, List<UserFunction> usersFunctions)
+        public static string ConvertFunctionsToExpression(string expression)
         {
-            while (isFunctionContains(expression, usersFunctions))
+            while (isFunctionContains(expression))
             {
-                foreach (var userFunction in usersFunctions)
+                foreach (var userFunction in functions)
                 {
                     if (expression.Contains(userFunction.Name + "("))
                     {

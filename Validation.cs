@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CalculatorNew
@@ -10,7 +12,7 @@ namespace CalculatorNew
     {
         static List<string> validCharacters = new List<string>()
         {
-            "+","-","*","/","1","2","3","4","5","6","7","8","9","0",")","(", "."
+            "+","-","*","/","1","2","3","4","5","6","7","8","9","0",")","(", ".", " "
         };
         static bool IsValidSymbol(char symbol)
         {
@@ -27,8 +29,13 @@ namespace CalculatorNew
         {
             return symbol == 42 || symbol == 43 || symbol == 45 || symbol == 47;
         }
-        public static bool IsValidString(string input)
+        public static bool IsValidString(ref string input)
         {
+            input = Regex.Replace(input, @"(\d+)\(", "$1*(");
+            input = Regex.Replace(input, @"\)(\d+)", ")*$1");
+            input = Regex.Replace(input, @"(\d+)\)\((\d+)", "$1)*($2");
+
+            input = input.Replace(" ", "");
             bool result = true;
             for (int i = 0; i < input.Length; i++)
             {

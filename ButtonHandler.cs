@@ -99,14 +99,30 @@ namespace CalculatorNew
 
             try
             {
-                variableHandler.HandleVariableAssignment(expression);
-                variableHandler.HandleExpressionEvaluation(expression);
-
-                entryField.Clear();
+                //variableHandler.HandleVariableAssignment(expression);
+                //variableHandler.HandleExpressionEvaluation(expression);
+                double answer = 0;               
+                string parsedStr = Parsing.Parse(expression);
+                switch (parsedStr)
+                {
+                    case "Variable":
+                    case "Function":
+                        historyField.AppendText(expression + Environment.NewLine);
+                        entryField.Clear();
+                        break;
+                    case "Incorrect input":
+                        WarningMessage.ThrowErrorMessage();
+                        break;
+                    default:
+                        answer = CalcResult.Evaluate(parsedStr);
+                        historyField.AppendText(expression + " = " + answer + Environment.NewLine);
+                        entryField.Clear();
+                        break;
+                }                                              
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                historyField.AppendText(expression + " = Ошибка" + Environment.NewLine);
+                historyField.AppendText(expression + " = Ошибка. " + ex.Message + Environment.NewLine);
             }
         }
 

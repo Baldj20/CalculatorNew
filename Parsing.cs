@@ -13,25 +13,26 @@ namespace CalculatorNew
             string output = input;
             if (UserFunction.isFunctionCreating(output))
             {
-                return output;
+                UserFunction.functions.Add(UserFunction.CreateUserFunction(output));
+                return "Function";
             }
-            output = UserFunction.ConvertFunctionsToExpression(output, new List<UserFunction>());
+            output = UserFunction.ConvertFunctionsToExpression(output);
             output = Variable.ParseInput(output);
             switch (output)
             {
                 case "Incorrect input":
-                    WarningMessage.ThrowErrorMessage();
+                    //WarningMessage.ThrowErrorMessage();
                     return "Incorrect input";
                 case "Variable":
                     return output;
                 default:
-                    if (Validation.IsValidString(output))
+                    if (Validation.IsValidString(ref output))
                     {
                         return ConvertToReversePolandNotation(output);
                     }
                     else
                     {
-                        WarningMessage.ThrowErrorMessage();
+                        //WarningMessage.ThrowErrorMessage();
                         return "Incorrect input";
                     }
             }
@@ -92,7 +93,7 @@ namespace CalculatorNew
                 output.Append(stack.Pop()).Append(' ');
             }
 
-            return output.ToString();
+            return output.ToString().Trim();
         }
 
 

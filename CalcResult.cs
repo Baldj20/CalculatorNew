@@ -20,9 +20,9 @@ namespace CalculatorNew
                 {
                     stack.Push(number);
                 }
-                else if (Variables.IsVariableDefined(token))
+                else if (Variable.IsVariableDefined(token))
                 {
-                    double.TryParse(Variables.GetVariableValue(token), out double num);
+                    double.TryParse(Variable.GetVariableValue(token), out double num);
                     stack.Push(num);
                 }
                 else

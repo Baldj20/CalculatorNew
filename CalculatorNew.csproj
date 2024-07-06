@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalcResult.cs" />
     <Compile Include="WarningMessage.cs" />
     <Compile Include="ButtonHandler.cs" />
     <Compile Include="Form1.cs">
