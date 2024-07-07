@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalculatorNew
 {
-    internal class Parsing
+    public class Parsing
     {
         public static string Parse(in string input)
         {

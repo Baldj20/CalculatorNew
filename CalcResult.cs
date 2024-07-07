@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalculatorNew
 {
-    internal static class CalcResult
+    public static class CalcResult
     {
         public static double Evaluate(string expression)
         {
