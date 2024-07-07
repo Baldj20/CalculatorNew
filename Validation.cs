@@ -12,7 +12,7 @@ namespace CalculatorNew
     {
         static List<string> validCharacters = new List<string>()
         {
-            "+","-","*","/","1","2","3","4","5","6","7","8","9","0",")","(", ".", " "
+            "+","-","*","/","1","2","3","4","5","6","7","8","9","0",")","(", ".", " ", ","
         };
         static bool IsValidSymbol(char symbol)
         {
@@ -25,9 +25,9 @@ namespace CalculatorNew
             }
             return false;
         }
-        public static bool IsOperator(char symbol)
+        public static bool IsOperator(string symbol)
         {
-            return symbol == 42 || symbol == 43 || symbol == 45 || symbol == 47;
+            return symbol == "+" || symbol == "-" || symbol == "*" || symbol == "/";
         }
         public static bool IsValidString(ref string input)
         {
@@ -50,7 +50,7 @@ namespace CalculatorNew
             char previous_symbol = '\0';
             foreach (var symbol in input)
             {
-                if ((previous_symbol == 44 || previous_symbol == 46 || IsOperator(previous_symbol)) && (symbol == 44 || symbol == 46 || IsOperator(symbol)))
+                if ((previous_symbol == 44 || previous_symbol == 46 || IsOperator(previous_symbol.ToString())) && (symbol == 44 || symbol == 46 || IsOperator(symbol.ToString())))
                 {
                     return false;
                 }
