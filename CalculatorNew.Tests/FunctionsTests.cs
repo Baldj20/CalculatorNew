@@ -34,8 +34,8 @@ namespace CalculatorNew.Tests
         public void Fxyz()
         {
             Parsing.Parse("F(x,y,z) = x + y * z");
-            string expression = "F(5,2,10)";
-            double expected = 25;
+            string expression = "F(7,2,10)";
+            double expected = 27;
 
             string parsedStr = Parsing.Parse(expression);
             double answer = CalcResult.Evaluate(parsedStr);

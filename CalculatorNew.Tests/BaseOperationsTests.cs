@@ -221,7 +221,7 @@ namespace CalculatorNew.Tests
         [Test]
         public void FractNums()
         {
-            string expression = "2.75 / 1.1";
+            string expression = "2,75 / 1,1";
             double expected = 2.5;
 
             string parsedStr = Parsing.Parse(expression);
