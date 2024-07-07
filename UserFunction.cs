@@ -190,26 +190,29 @@ namespace CalculatorNew
 
                         var args = argsString.Split(',');
 
-                        var localVars = new Dictionary<string, double>();
-                        for (int i = 0; i < userFunction.FunctionArgs.Length; i++)
+                        if (args.Length.Equals(userFunction.FunctionArgs.Length))
                         {
-                            localVars[userFunction.FunctionArgs[i]] = Convert.ToDouble(args[i]);
+                            var localVars = new Dictionary<string, double>();
+                            for (int i = 0; i < userFunction.FunctionArgs.Length; i++)
+                            {
+                                localVars[userFunction.FunctionArgs[i]] = Convert.ToDouble(args[i]);
+                            }
+
+                            string userFunctionBody = userFunction.Body;
+
+                            for (int i = 0; i < userFunction.FunctionArgs.Length; i++)
+                            {
+
+                                string pattern = $@"\b{userFunction.FunctionArgs[i]}\b";
+                                userFunctionBody = Regex.Replace(userFunctionBody, pattern, args[i]);
+                            }
+
+
+                            string functionInitText = userFunction.Name + "(" + argsString + ")";
+
+                            expression = expression.Replace(functionInitText, userFunctionBody);
+                            break;
                         }
-
-                        string userFunctionBody = userFunction.Body;
-
-                        for (int i = 0; i < userFunction.FunctionArgs.Length; i++)
-                        {
-
-                            string pattern = $@"\b{userFunction.FunctionArgs[i]}\b";
-                            userFunctionBody = Regex.Replace(userFunctionBody, pattern, args[i]);
-                        }
-
-
-                        string functionInitText = userFunction.Name + "(" + argsString + ")";
-
-                        expression = expression.Replace(functionInitText, userFunctionBody);
-                        break;
                     }
                 }
             }
