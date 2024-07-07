@@ -42,7 +42,7 @@ namespace CalculatorNew
                 result = result && IsValidSymbol(input[i]);
             }
 
-            if (input[0] == 44 || input[0] == 46 || IsOperator(input[0]))
+            if (input[0] == 44 || input[0] == 46 || input[0] == 42 || input[0] == 43 || input[0] == 47)
             {
                 return false;
             }

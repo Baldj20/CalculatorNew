@@ -17,7 +17,7 @@ namespace CalculatorNew
         {
             this.entryField = entryField;
             this.historyField = historyField;
-            this.variableHandler = new VariableHandler(historyField, entryField); // Передаем entryField в VariableHandler
+            this.variableHandler = new VariableHandler(historyField, entryField);
         }
 
         public void NumberButton_Click(object sender, EventArgs e)
@@ -91,16 +91,14 @@ namespace CalculatorNew
 
         public void Enter_Button_Click(object sender, EventArgs e)
         {
-            string expression = entryField.Text.Trim(); // Удалить пробелы в начале и в конце
+            string expression = entryField.Text.Trim();
             if (string.IsNullOrEmpty(expression))
             {
-                return; // Если поле пустое, ничего не делаем
+                return;
             }
 
             try
             {
-                //variableHandler.HandleVariableAssignment(expression);
-                //variableHandler.HandleExpressionEvaluation(expression);
                 double answer = 0;               
                 string parsedStr = Parsing.Parse(expression);
                 switch (parsedStr)
@@ -122,7 +120,7 @@ namespace CalculatorNew
             }
             catch (Exception ex)
             {
-                historyField.AppendText(expression + " = Ошибка. " + ex.Message + Environment.NewLine);
+                historyField.AppendText("Ошибка. " + ex.Message + Environment.NewLine);
             }
         }
 

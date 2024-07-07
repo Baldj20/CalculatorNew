@@ -46,46 +46,66 @@ namespace CalculatorNew
 
             foreach (char token in input)
             {
-                if ((previous_token == 44 || previous_token == 46) && !char.IsDigit(token))
+                if (token == 45)
                 {
-                    output.Append('0').Append(' ');
+                    previous_token = token;
+
+                    output.Append(' ');
                 }
-                if (char.IsDigit(token) && char.IsDigit(previous_token))
+                else
                 {
-                    output.Remove(output.Length - 1, 1).Append(token).Append(' ');
-                }
-                else if ((token == 46 || token == 44) && char.IsDigit(previous_token))
-                {
-                    output.Remove(output.Length - 1, 1).Append(',');
-                }
-                else if (char.IsDigit(token))
-                {
-                    output.Append(token).Append(' ');
-                }
-                else if (Validation.IsOperator(token))
-                {
-                    while (stack.Count > 0 && Validation.IsOperator(stack.Peek()) && GetOperatorPriority(stack.Peek()) >= GetOperatorPriority(token))
+                    if ((previous_token == 44 || previous_token == 46) && !char.IsDigit(token))
                     {
-                        output.Append(stack.Pop()).Append(' ');
+                        output.Append('0').Append(' ');
                     }
-                    stack.Push(token);
-                }
-                else if (token == '(')
-                {
-                    stack.Push(token);
-                }
-                else if (token == ')')
-                {
-                    while (stack.Count > 0 && stack.Peek() != '(')
+                    
+                    if ((char.IsDigit(token) && previous_token == 45))
                     {
-                        output.Append(stack.Pop()).Append(' ');
+                        output.Remove(output.Length - 1, 1).Append('-').Append(token).Append(' ');
                     }
-                    if (stack.Count > 0 && stack.Peek() == '(')
+                    
+                    else if (char.IsDigit(token) && char.IsDigit(previous_token))
                     {
-                        stack.Pop();
+                        output.Remove(output.Length - 1, 1).Append(token).Append(' ');
                     }
+                    else if ((token == 46 || token == 44) && char.IsDigit(previous_token))
+                    {
+                        output.Remove(output.Length - 1, 1).Append(',');
+                    }
+                    else if (char.IsDigit(token))
+                    {
+                        output.Append(token).Append(' ');
+                    }
+                    else if (Validation.IsOperator(token))
+                    {
+                        while (stack.Count > 0 && Validation.IsOperator(stack.Peek()) && GetOperatorPriority(stack.Peek()) >= GetOperatorPriority(token))
+                        {
+                            output.Append(stack.Pop()).Append(' ');
+                        }
+                        stack.Push(token);
+                    }
+                    else if (token == '(')
+                    {
+                        stack.Push(token);
+                    }
+                    else if (token == ')')
+                    {
+                        while (stack.Count > 0 && stack.Peek() != '(')
+                        {
+                            output.Append(stack.Pop()).Append(' ');
+                        }
+                        if (stack.Count > 0 && stack.Peek() == '(')
+                        {
+                            stack.Pop();
+                        }
+                    }
+                    else
+                    {
+                        stack.Push(token);
+                    }
+                    previous_token = token;
                 }
-                previous_token = token;
+                
             }
 
             while (stack.Count > 0)
