@@ -21,7 +21,6 @@ namespace CalculatorNew
             switch (output)
             {
                 case "Incorrect input":
-                    //WarningMessage.ThrowErrorMessage();
                     return "Incorrect input";
                 case "Variable":
                     return output;
@@ -32,79 +31,18 @@ namespace CalculatorNew
                     }
                     else
                     {
-                        //WarningMessage.ThrowErrorMessage();
                         return "Incorrect input";
                     }
             }
         }
 
-        public static string ConvertToReversePolandNotation(string input)
+        public static int GetOperatorPriority(string operator_symbol)
         {
-            var output = new StringBuilder();
-            Stack<char> stack = new Stack<char>();
-            char previous_token = '\0';
-
-            foreach (char token in input)
-            {
-                if ((previous_token == 44 || previous_token == 46) && !char.IsDigit(token))
-                {
-                    output.Append('0').Append(' ');
-                }
-                if (char.IsDigit(token) && char.IsDigit(previous_token))
-                {
-                    output.Remove(output.Length - 1, 1).Append(token).Append(' ');
-                }
-                else if ((token == 46 || token == 44) && char.IsDigit(previous_token))
-                {
-                    output.Remove(output.Length - 1, 1).Append(',');
-                }
-                else if (char.IsDigit(token))
-                {
-                    output.Append(token).Append(' ');
-                }
-                else if (Validation.IsOperator(token))
-                {
-                    while (stack.Count > 0 && Validation.IsOperator(stack.Peek()) && GetOperatorPriority(stack.Peek()) >= GetOperatorPriority(token))
-                    {
-                        output.Append(stack.Pop()).Append(' ');
-                    }
-                    stack.Push(token);
-                }
-                else if (token == '(')
-                {
-                    stack.Push(token);
-                }
-                else if (token == ')')
-                {
-                    while (stack.Count > 0 && stack.Peek() != '(')
-                    {
-                        output.Append(stack.Pop()).Append(' ');
-                    }
-                    if (stack.Count > 0 && stack.Peek() == '(')
-                    {
-                        stack.Pop();
-                    }
-                }
-                previous_token = token;
-            }
-
-            while (stack.Count > 0)
-            {
-                output.Append(stack.Pop()).Append(' ');
-            }
-
-            return output.ToString().Trim();
-        }
-
-
-
-        public static int GetOperatorPriority(char operator_symbol)
-        {
-            if (operator_symbol == '+' || operator_symbol == '-')
+            if (operator_symbol == "+" || operator_symbol == "-")
             {
                 return 1;
             }
-            else if (operator_symbol == '*' || operator_symbol == '/')
+            else if (operator_symbol == "*" || operator_symbol == "/")
             {
                 return 2;
             }
@@ -112,6 +50,95 @@ namespace CalculatorNew
             {
                 return 0;
             }
+        }
+
+        public static string ConvertToReversePolandNotation(string input)
+        {
+            StringBuilder output = new StringBuilder();
+            Stack<string> stack = new Stack<string>();
+
+            string[] tokens = TokenizeInput(input);
+
+            foreach (string token in tokens)
+            {
+                if (IsNumber(token))
+                {
+                    output.Append(token).Append(" ");
+                }
+                else if (Validation.IsOperator(token))
+                {
+                    while (stack.Count > 0 && Validation.IsOperator(stack.Peek()) && GetOperatorPriority(stack.Peek()) >= GetOperatorPriority(token))
+                    {
+                        output.Append(stack.Pop()).Append(" ");
+                    }
+                    stack.Push(token);
+                }
+                else if (token == "(")
+                {
+                    stack.Push(token);
+                }
+                else if (token == ")")
+                {
+                    while (stack.Count > 0 && stack.Peek() != "(")
+                    {
+                        output.Append(stack.Pop()).Append(" ");
+                    }
+                    if (stack.Count > 0 && stack.Peek() == "(")
+                    {
+                        stack.Pop();
+                    }
+                }
+            }
+
+            while (stack.Count > 0)
+            {
+                output.Append(stack.Pop()).Append(" ");
+            }
+
+            return output.ToString().TrimEnd();
+        }
+
+        private static string[] TokenizeInput(string input)
+        {
+            input = input.Replace(" ", "");
+            input = input.Replace("(-", "(0-");
+            input = input.Replace("+-", "+0-"); 
+            input = input.Replace("*-", "*0-"); 
+            input = input.Replace("/-", "/0-"); 
+            if (input[0] == '-')
+            {
+                input = "0" + input;
+            }
+            List<string> tokens = new List<string>();
+            StringBuilder currentToken = new StringBuilder();
+
+            foreach (char c in input)
+            {
+                if (Validation.IsOperator(c.ToString()) || c == '(' || c == ')')
+                {
+                    if (currentToken.Length > 0)
+                    {
+                        tokens.Add(currentToken.ToString());
+                        currentToken.Clear();
+                    }
+                    tokens.Add(c.ToString());
+                }
+                else
+                {
+                    currentToken.Append(c);
+                }
+            }
+
+            if (currentToken.Length > 0)
+            {
+                tokens.Add(currentToken.ToString());
+            }
+
+            return tokens.ToArray();
+        }
+        private static bool IsNumber(string token)
+        {
+            return double.TryParse(token, out _);
         }
     }
 }

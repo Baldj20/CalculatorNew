@@ -17,90 +17,81 @@ namespace CalculatorNew
         {
             this.entryField = entryField;
             this.historyField = historyField;
-            this.variableHandler = new VariableHandler(historyField, entryField); // Передаем entryField в VariableHandler
+            this.variableHandler = new VariableHandler(historyField, entryField);
         }
 
         public void NumberButton_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.Button button = sender as System.Windows.Forms.Button;
-            if (button != null)
-            {
-                if (entryField.Text == "0" && entryField.Text != null)
-                {
-                    entryField.Text = button.Text;
-                }
-                else
-                {
-                    entryField.Text += button.Text;
-                }
-            }
+            InsertTextAtCursor((sender as Button)?.Text);
         }
 
         public void CommaButton_Click(object sender, EventArgs e)
         {
-            entryField.Text += ",";
+            InsertTextAtCursor(",");
         }
 
         public void Dot_Button_Click(object sender, EventArgs e)
         {
             if (!entryField.Text.Contains(".") && entryField.Text != "")
             {
-                entryField.Text += ".";
+                InsertTextAtCursor(".");
             }
         }
 
         public void X_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "x";
+            InsertTextAtCursor("x");
         }
 
         public void Y_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "y";
+            InsertTextAtCursor("y");
         }
 
         public void Z_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "z";
+            InsertTextAtCursor("z");
         }
 
         public void FunctionX_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "F(x)";
+            InsertTextAtCursor("F(x)");
+            entryField.SelectionStart -= 2;
         }
 
         public void FunctionXY_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "F(x,y)";
+            InsertTextAtCursor("F(x,y)");
+            entryField.SelectionStart -= 4;
         }
 
         public void FunctionXYZ_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "F(x,y,z)";
+            InsertTextAtCursor("F(x,y,z)");
+            entryField.SelectionStart -= 6; 
         }
 
         public void LeftBrackets_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += "(";
+            InsertTextAtCursor("(");
         }
 
         public void RightBrackets_Button_Click(object sender, EventArgs e)
         {
-            entryField.Text += ")";
+            InsertTextAtCursor(")");
         }
+
 
         public void Enter_Button_Click(object sender, EventArgs e)
         {
-            string expression = entryField.Text.Trim(); // Удалить пробелы в начале и в конце
+            string expression = entryField.Text.Trim();
             if (string.IsNullOrEmpty(expression))
             {
-                return; // Если поле пустое, ничего не делаем
+                return;
             }
 
             try
             {
-                //variableHandler.HandleVariableAssignment(expression);
-                //variableHandler.HandleExpressionEvaluation(expression);
                 double answer = 0;               
                 string parsedStr = Parsing.Parse(expression);
                 switch (parsedStr)
@@ -122,28 +113,27 @@ namespace CalculatorNew
             }
             catch (Exception ex)
             {
-                historyField.AppendText(expression + " = Ошибка. " + ex.Message + Environment.NewLine);
+                historyField.AppendText("Ошибка. " + ex.Message + Environment.NewLine);
             }
         }
 
         public void OperationButton_Click(string operation)
         {
-            if (!string.IsNullOrEmpty(entryField.Text))
-            {
-                entryField.Text += $" {operation} ";
-            }
+            InsertTextAtCursor($" {operation} ");
         }
 
         public void Equals_Button_Click()
         {
-            entryField.Text += " = ";
+            InsertTextAtCursor(" = ");
         }
 
         public void Delete_Button_Click()
         {
-            if (entryField.Text.Length > 0)
+            if (entryField.SelectionStart > 0)
             {
-                entryField.Text = entryField.Text.Remove(entryField.Text.Length - 1, 1);
+                int selectionStart = entryField.SelectionStart;
+                entryField.Text = entryField.Text.Remove(selectionStart - 1, 1);
+                entryField.SelectionStart = selectionStart - 1;
             }
         }
 
@@ -155,6 +145,12 @@ namespace CalculatorNew
         public void HistoryField_MouseClick(object sender, MouseEventArgs e)
         {
             variableHandler.HandleHistoryFieldClick(e.Location);
+        }
+        private void InsertTextAtCursor(string text)
+        {
+            int selectionStart = entryField.SelectionStart;
+            entryField.Text = entryField.Text.Insert(selectionStart, text);
+            entryField.SelectionStart = selectionStart + text.Length;
         }
     }
 }

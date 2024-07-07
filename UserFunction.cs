@@ -48,7 +48,7 @@ namespace CalculatorNew
         public static bool isFunctionCreating(string exeption)
         {
             if (exeption.Contains("="))
-            { 
+            {
                 var parts = exeption.Split('=');
                 if (parts.Length != 2)
                     return false;
@@ -57,7 +57,7 @@ namespace CalculatorNew
 
 
                 if (left.Contains("(") && left.Contains(")"))
-                {                    
+                {
                     return true;
                 }
                 else
@@ -152,7 +152,7 @@ namespace CalculatorNew
                 functions.Add(userFunction);
                 return userFunction;
             }
-         
+
         }
 
 

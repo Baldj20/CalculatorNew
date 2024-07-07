@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using CalculatorNew;
+using System;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace CalculatorNew
 {
@@ -59,6 +55,8 @@ namespace CalculatorNew
             n9.Click += buttonHandler.NumberButton_Click;
             comma.Click += buttonHandler.CommaButton_Click;
 
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(Form1_KeyDown);
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -66,6 +64,15 @@ namespace CalculatorNew
             if (result == DialogResult.No)
             {
                 e.Cancel = true;
+            }
+        }
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                buttonHandler.Enter_Button_Click(sender, e);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
     }

@@ -35,7 +35,7 @@ namespace CalculatorNew
 
         public static string ReplaceVariables(string expression)
         {
-            foreach (var variable in variables)
+            foreach (var variable in variables.Reverse())
             {
                 string variableKey = variable.Key;
                 string variableValue = variable.Value.ToString();
