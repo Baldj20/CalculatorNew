@@ -111,10 +111,13 @@ namespace CalculatorNew
             return Regex.Replace(expression, pattern, replacement);
         }
 
+        private static UserFunction FindUserFunctionByNameAndArgs(string name, string[] args)
+        {
+            return functions.FirstOrDefault(f => f.Name == name && f.FunctionArgs.Length == args.Length);
+        }
+
         public static UserFunction CreateUserFunction(string expression)
         {
-            UserFunction userFunction = new UserFunction(null, null, null);
-
             var parts = expression.Split('=');
             var definition = parts[0].Trim();
             var body = AddMultiplicationSigns(parts[1].Trim());
@@ -136,10 +139,20 @@ namespace CalculatorNew
                 isValidArgument(args[i]);
             }
             doesBodyContainsArgument(body, args);
-            userFunction.Name = name;
-            userFunction.FunctionArgs = args;
-            userFunction.Body = "(" + body + ")";
-            return userFunction;
+            UserFunction existingFunction = FindUserFunctionByNameAndArgs(name, args);
+            if (existingFunction != null)
+            {
+                existingFunction.FunctionArgs = args;
+                existingFunction.Body = "(" + body + ")";
+                return existingFunction;
+            }
+            else
+            {
+                UserFunction userFunction = new UserFunction(name, args, "(" + body + ")");
+                functions.Add(userFunction);
+                return userFunction;
+            }
+         
         }
 
 
@@ -157,6 +170,8 @@ namespace CalculatorNew
             return isFunctionUsed;
 
         }
+
+
 
         public static string ConvertFunctionsToExpression(string expression)
         {
